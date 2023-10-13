@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer");
+const multer = require("multer-utf8");
 const tasksController = require("../../app/controllers/TasksController");
 const usersController = require("../../app/controllers/UsersController");
 const fileController = require("../../app/controllers/FileController");

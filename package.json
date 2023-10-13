@@ -20,7 +20,7 @@
     "firebase": "^10.4.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
-    "multer": "^1.4.5-lts.1"
+    "multer-utf8": "^1.4.5-lts.11"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
