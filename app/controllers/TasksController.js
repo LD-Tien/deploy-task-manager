@@ -10,10 +10,16 @@ class TasksController {
         return res.json({
           code: 200,
           data: tasks,
-          message: "Get task successfully",
+          message: "Get tasks successfully",
         });
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Get tasks failed",
+        });
+      });
   }
 
   // [POST] /addTask
@@ -27,13 +33,22 @@ class TasksController {
           message: "Add task successfully",
         });
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Add task failed",
+        });
+      });
   }
 
   // [PUT] /updateTask/:id
   updateTask(req, res, next) {
     const updateTask = new Task(req.body);
-    Task.updateOne({ _id: updateTask.id, owner: updateTask.owner }, updateTask)
+    Task.updateOne(
+      { taskId: updateTask.taskId, owner: updateTask.owner },
+      updateTask
+    )
       .then(() => {
         return res.json({
           code: 200,
@@ -41,22 +56,26 @@ class TasksController {
           message: "Update task successfully",
         });
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Update task failed",
+        });
+      });
   }
 
   // [PUT] /addSubTask/:parentTaskId
   addSubTask(req, res, next) {
-    const idSubTask = new ObjectId();
     Task.updateOne(
       {
-        _id: new ObjectId(req.params.parentTaskId),
+        taskId: req.params.parentTaskId,
         owner: new ObjectId(req.userId),
       },
       {
         $push: {
           subTasks: {
             ...req.body,
-            _id: idSubTask,
           },
         },
       }
@@ -64,26 +83,31 @@ class TasksController {
       .then(() => {
         return res.json({
           code: 200,
-          data: { _id: idSubTask.toString(), ...req.body },
-          message: "Add SubTask successfully",
+          data: req.body,
+          message: "Add subtask successfully",
         });
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Add subtask failed",
+        });
+      });
   }
 
   // [PUT] /updateSubTask/:parentTaskId/:subTaskId
   updateSubTask(req, res, next) {
     Task.updateOne(
       {
-        _id: new ObjectId(req.params.parentTaskId),
+        taskId: req.params.parentTaskId,
         owner: new ObjectId(req.userId),
-        "subTasks._id": new ObjectId(req.params.subTaskId),
+        "subTasks.subTaskId": req.params.subTaskId,
       },
       {
         $set: {
           "subTasks.$": {
             ...req.body,
-            _id: new ObjectId(req.params.subTaskId),
           },
         },
       }
@@ -95,12 +119,18 @@ class TasksController {
           message: "Update subtask successfully",
         });
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Update subtask failed",
+        });
+      });
   }
 
   // [DELETE] /deleteTask/:id
   deleteTask(req, res, next) {
-    Task.deleteOne({ _id: req.params.id })
+    Task.deleteOne({ taskId: req.params.id })
       .then(() => {
         res.json({
           code: 200,
@@ -108,20 +138,26 @@ class TasksController {
         });
         next();
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Delete task failed",
+        });
+      });
   }
 
   // [PUT] /deleteSubTask/:parentTaskId/:subTaskId
   deleteSubTask(req, res, next) {
     Task.updateOne(
       {
-        _id: new ObjectId(req.params.parentTaskId),
+        taskId: req.params.parentTaskId,
         owner: new ObjectId(req.userId),
       },
       {
         $pull: {
           subTasks: {
-            _id: new ObjectId(req.params.subTaskId),
+            subTaskId: req.params.subTaskId,
           },
         },
       }
@@ -132,7 +168,13 @@ class TasksController {
           message: "Delete subtask successfully",
         });
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Delete subtask failed",
+        });
+      });
   }
 }
 

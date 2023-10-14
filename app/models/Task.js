@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema(
   {
+    taskId: String,
     title: String,
     subTasks: [Schema.Types.Mixed],
     note: {
@@ -19,7 +20,7 @@ const TaskSchema = new Schema(
     isImportant: Boolean,
     isCompleted: Boolean,
     listId: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: "List",
     },
     owner: {

@@ -4,12 +4,11 @@ const Schema = mongoose.Schema;
 
 const List = new Schema(
   {
-    title: {
-      type: "String",
-    },
+    listId: String,
+    title: String,
     owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users"
+      ref: "User",
     },
   },
   {

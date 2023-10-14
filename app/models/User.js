@@ -5,18 +5,10 @@ const ObjectId = mongoose.ObjectId;
 
 const User = new Schema(
   {
-    "email": {
-      "type": "String"
-    },
-    "password": {
-      "type": "Date"
-    },
-    "__v": {
-      "type": "Number"
-    },
-    "username": {
-      "type": "String"
-    }
+    userId: String,
+    email: String,
+    password: String,
+    username: String,
   },
   {
     timestamps: true,

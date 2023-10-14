@@ -7,6 +7,9 @@ const {
   deleteObject,
 } = require("firebase/storage");
 const config = require("../../config/firebase.config");
+const Task = require("../models/Task");
+const { default: mongoose } = require("mongoose");
+const ObjectId = mongoose.ObjectId;
 
 //Initialize a firebase application
 initializeApp(config.firebaseConfig);
@@ -25,10 +28,10 @@ giveCurrentDateTime = () => {
 };
 
 class UploadFileController {
+  // [POST] /uploadFile/:taskId
   async uploadFile(req, res) {
     try {
       const dateTime = giveCurrentDateTime();
-      console.log(req.file.originalname)
       const firebaseName =
         req.file.originalname + "|" + dateTime + "|" + req.userId;
 
@@ -49,17 +52,30 @@ class UploadFileController {
 
       // Grab the public url
       const downloadURL = await getDownloadURL(snapshot.ref);
-
-      console.log("File successfully uploaded.");
-      return res.send({
+      const fileData = {
         firebaseName: firebaseName,
         name: req.file.originalname,
         type: req.file.mimetype,
         size: req.file.size,
         downloadURL: downloadURL,
+      };
+
+      Task.findOne({ taskId: req.params.taskId }).then((task) => {
+        task.files.push(fileData);
+        Task.updateOne({ taskId: req.params.taskId }, task).catch(console.log);
+      });
+
+      return res.json({
+        code: 200,
+        data: fileData,
+        message: "File successfully uploaded.",
       });
     } catch (error) {
-      return res.status(400).send(error.message);
+      return res.json({
+        code: 400,
+        error: error.message,
+        message: "Upload file failed",
+      });
     }
   }
 
@@ -70,7 +86,13 @@ class UploadFileController {
       .then(() => {
         next();
       })
-      .catch(console.log);
+      .catch((error) => {
+        return res.json({
+          code: 400,
+          error: error.message,
+          message: "Delete file failed",
+        });
+      });
   }
 
   // [delete] deleteTask/:id

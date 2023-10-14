@@ -14,7 +14,7 @@ router.put("/addSubTask/:parentTaskId", usersController.auth, tasksController.ad
 router.put("/updateSubTask/:parentTaskId/:subTaskId", usersController.auth, tasksController.updateSubTask)
 router.delete("/deleteTask/:id", usersController.auth, tasksController.deleteTask, fileController.deleteFilesInTask)
 router.put("/deleteSubTask/:parentTaskId/:subTaskId", usersController.auth, tasksController.deleteSubTask)
-router.post("/uploadFile", upload.single("fileName"), usersController.auth,fileController.uploadFile)
+router.post("/uploadFile/:taskId", upload.single("fileName"), usersController.auth,fileController.uploadFile)
 router.put("/deleteFile/:directory",  usersController.auth,fileController.deleteFile, tasksController.updateTask)
 
 module.exports = router;
