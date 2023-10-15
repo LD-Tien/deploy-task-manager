@@ -4,6 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const db = require("./config/db");
 const route = require("./routes");
+const { nextTick } = require("process");
 require("dotenv").config();
 
 db.connect();
@@ -21,7 +22,7 @@ app.use(express.static(path.join(__dirname, "app", "build")));
 route(app);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "app/build", "index.html"));
+  return res.sendFile(path.join(__dirname, "app/build", "index.html"));
 });
 
 app.listen(process.env.PORT, () => {

@@ -1,10 +1,9 @@
 const Task = require("../models/Task");
-const ObjectId = require("mongoose").Types.ObjectId;
 
 class TasksController {
   // [GET] /getTasks
   getTasks(req, res, next) {
-    Task.find({ owner: new ObjectId(req.userId) })
+    Task.find({ owner: req.userId })
       .sort({ updatedAt: -1 })
       .then((tasks) => {
         return res.json({
@@ -70,7 +69,7 @@ class TasksController {
     Task.updateOne(
       {
         taskId: req.params.parentTaskId,
-        owner: new ObjectId(req.userId),
+        owner: req.userId,
       },
       {
         $push: {
@@ -101,7 +100,7 @@ class TasksController {
     Task.updateOne(
       {
         taskId: req.params.parentTaskId,
-        owner: new ObjectId(req.userId),
+        owner: req.userId,
         "subTasks.subTaskId": req.params.subTaskId,
       },
       {
@@ -152,7 +151,7 @@ class TasksController {
     Task.updateOne(
       {
         taskId: req.params.parentTaskId,
-        owner: new ObjectId(req.userId),
+        owner: req.userId,
       },
       {
         $pull: {

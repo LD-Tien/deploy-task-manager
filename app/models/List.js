@@ -6,10 +6,7 @@ const List = new Schema(
   {
     listId: String,
     title: String,
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    owner: String,
   },
   {
     timestamps: true,

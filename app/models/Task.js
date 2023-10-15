@@ -23,10 +23,8 @@ const TaskSchema = new Schema(
       type: String,
       ref: "List",
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    owner: String,
+    
     partners: [Schema.Types.Mixed],
   },
   {

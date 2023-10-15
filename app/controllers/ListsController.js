@@ -1,11 +1,10 @@
 const List = require("../models/List");
 const Task = require("../models/Task");
-const { ObjectId } = require("mongoose").Types;
 
 class ListsController {
   // [GET] /getLists
   getLists(req, res, next) {
-    List.find({ owner: new ObjectId(req.userId) })
+    List.find({ owner: req.userId })
       .then((lists) => {
         return res.json({
           code: 200,
@@ -24,7 +23,7 @@ class ListsController {
 
   // [POST] /addNewList
   addNewList(req, res, next) {
-    const list = new List({ ...req.body, owner: new ObjectId(req.userId) });
+    const list = new List({ ...req.body, owner: req.userId });
     List.insertMany([list])
       .then((newList) => {
         return res.json({
@@ -62,15 +61,13 @@ class ListsController {
 
   // [DELETE] /deleteList/:id
   deleteList(req, res, next) {
-    Task.find({ owner: new ObjectId(req.userId), listId: req.params.id }).then(
-      (tasks) => {
-        if (tasks) {
-          req.tasksDelete = tasks;
-          Task.deleteMany({ listId: req.params.id });
-          next(); // delete files in tasks
-        }
+    Task.find({ owner: req.userId, listId: req.params.id }).then((tasks) => {
+      if (tasks) {
+        req.tasksDelete = tasks;
+        Task.deleteMany({ listId: req.params.id });
+        next(); // delete files in tasks
       }
-    );
+    });
 
     List.deleteOne({ listId: req.params.id })
       .then(() => {

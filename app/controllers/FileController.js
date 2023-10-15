@@ -9,7 +9,6 @@ const {
 const config = require("../../config/firebase.config");
 const Task = require("../models/Task");
 const { default: mongoose } = require("mongoose");
-const ObjectId = mongoose.ObjectId;
 
 //Initialize a firebase application
 initializeApp(config.firebaseConfig);
