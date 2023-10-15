@@ -8,6 +8,7 @@
 
 # production
 /client
+serviceAccountKey.json
 
 # misc
 .DS_Store
