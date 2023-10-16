@@ -7,6 +7,10 @@ var serviceAccount = {
   private_key: process.env.PRIVATE_KEY
     ? process.env.PRIVATE_KEY.replace(/\\n/gm, "\n")
     : undefined,
+    // OR 
+    // private_key: process.env.PRIVATE_KEY
+    // ? JSON.parse(process.env.PRIVATE_KEY)
+    // : undefined,
   client_email: process.env.CLIENT_EMAIL,
   client_id: process.env.CLIENT_ID,
   auth_uri: process.env.AUTH_URI,
