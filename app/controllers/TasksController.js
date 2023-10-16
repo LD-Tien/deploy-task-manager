@@ -128,14 +128,13 @@ class TasksController {
   }
 
   // [DELETE] /deleteTask/:id
-  deleteTask(req, res, next) {
+  deleteTask(req, res) {
     Task.deleteOne({ taskId: req.params.id })
       .then(() => {
-        res.json({
+        return res.json({
           code: 200,
           message: "Delete task successfully",
         });
-        next();
       })
       .catch((error) => {
         return res.json({

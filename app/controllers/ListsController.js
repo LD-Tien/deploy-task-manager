@@ -65,7 +65,6 @@ class ListsController {
       if (tasks) {
         req.tasksDelete = tasks;
         Task.deleteMany({ listId: req.params.id });
-        next(); // delete files in tasks
       }
     });
 
