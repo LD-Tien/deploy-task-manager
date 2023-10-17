@@ -1,3 +1,4 @@
+const { getAuth } = require("firebase-admin/auth");
 const admin = require("firebase-admin");
 
 var serviceAccount = {
@@ -7,10 +8,10 @@ var serviceAccount = {
   private_key: process.env.PRIVATE_KEY
     ? process.env.PRIVATE_KEY.replace(/\\n/gm, "\n")
     : undefined,
-    // OR 
-    // private_key: process.env.PRIVATE_KEY
-    // ? JSON.parse(process.env.PRIVATE_KEY)
-    // : undefined,
+  // OR
+  // private_key: process.env.PRIVATE_KEY
+  // ? JSON.parse(process.env.PRIVATE_KEY)
+  // : undefined,
   client_email: process.env.CLIENT_EMAIL,
   client_id: process.env.CLIENT_ID,
   auth_uri: process.env.AUTH_URI,
@@ -24,5 +25,13 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://taskmanager-8f0a1-default-rtdb.o.com",
 });
+
+getAuth()
+  .projectConfigManager()
+  .updateProjectConfig({
+    emailPrivacyConfig: {
+      enableImprovedEmailPrivacy: false,
+    },
+  });
 
 module.exports = admin;
